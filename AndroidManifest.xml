@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.tictacanimals"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
+
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false"/>
+    
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.example.tictacanimals.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.tictacanimals.GameActivity"
+            android:label="@string/title_activity_game"
+            android:parentActivityName="com.example.tictacanimals.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.tictacanimals.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.tictacanimals.BluetoothGameActivity"
+            android:label="@string/title_activity_bluetooth_game"
+            android:parentActivityName="com.example.tictacanimals.GameActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.tictacanimals.GameActivity" />
+        </activity>
+        <activity
+            android:name="com.example.tictacanimals.SetupGame"
+            android:label="@string/title_activity_setup_game"
+            android:parentActivityName="com.example.tictacanimals.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.tictacanimals.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.tictacanimals.SetupGallary"
+            android:label="@string/title_activity_setup_gallary" >
+        </activity>
+    </application>
+
+</manifest>

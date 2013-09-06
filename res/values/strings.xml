@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TicTacAnimals</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="main_menu">&quot;Main Menu&quot;</string>
+    <string name="Button1String">Start Simple Game</string>
+    <string name="Button2String">Bluetooth Game</string>
+    <string name="Button3String">advancedGameClicked</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_bluetooth_game">BluetoothGameActivity</string>
+    <string name="title_activity_setup_game">SetupGame</string>
+    <string name="title_activity_setup_gallary">SetupGallary</string>
+
+</resources>

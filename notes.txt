@@ -1,0 +1,5 @@
+Notes to myself you're welcome to view and hopefully answer
+
+in GameActivity using someAnim = ObjectAnimator.ofFloat(nullObject, ...) while settting nullObject to point to an actual
+object gave me a null pointer exception. Does someAnim create a copy of nullObject and not keep the reference?
+

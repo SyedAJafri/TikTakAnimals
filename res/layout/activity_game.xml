@@ -1,0 +1,120 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    tools:context=".GameActivity"
+    android:weightSum="3"
+    android:id="@+id/MainLinearLayout" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:weightSum="3" >
+
+        <ImageView
+            android:id="@+id/ImageView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" 
+            android:onClick="view1Clicked"
+            android:adjustViewBounds="false"
+            android:rotationX="0.0"
+            >
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/ImageView21"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="view2Clicked"
+            android:adjustViewBounds="false" >
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/ImageView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="view3Clicked"
+            android:adjustViewBounds="false" >
+        </ImageView>
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:weightSum="3" >
+
+        <ImageView
+            android:id="@+id/ImageView4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" 
+            android:onClick="view4Clicked"
+            android:adjustViewBounds="false">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/ImageView5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="view5Clicked"
+            android:adjustViewBounds="false" >
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/ImageView6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="view6Clicked"
+            android:adjustViewBounds="false" >
+        </ImageView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:weightSum="3"
+        android:adjustViewBounds="false" >
+
+        <ImageView
+            android:id="@+id/ImageView7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="view7Clicked" 
+            android:adjustViewBounds="false">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/ImageView8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" 
+            android:onClick="view8Clicked"
+            android:adjustViewBounds="false">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/ImageView9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" 
+            android:onClick="view9Clicked"
+            android:adjustViewBounds="false">
+        </ImageView>
+
+    </LinearLayout>
+        
+</LinearLayout>

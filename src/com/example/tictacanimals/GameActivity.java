@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,7 +94,6 @@ public class GameActivity extends Activity {
 
 		@Override
 		public void onAnimationEnd(Animator animation) {
-			System.out.println("onAnimationEnd");
 			animateWinningBoxes();
 			
 		}
@@ -106,7 +106,7 @@ public class GameActivity extends Activity {
 		@Override
 		public void onAnimationStart(Animator animation) {
 			
-			//TODO Prevent the user from  clicking anymore until the game clears
+			stopClicking=true;
 			
 		}
 
@@ -116,6 +116,9 @@ public class GameActivity extends Activity {
 	
 	//If this game is a simple game we will use the default values if not we can get them from the SetupGallary Activity 
 	boolean isSimpleGame;
+	
+	//Prevents the player from the time a game is won till the game is cleared
+	private boolean stopClicking =false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -190,15 +193,6 @@ public class GameActivity extends Activity {
 		
 		winningBoxes = new ImageView[3]; 
 		
-		//TODO Draw TicTakToe Frame 
-		
-		//Why is this not working maybe the Image Views on top Maybe I can make the transparent
-		Canvas ticTakFrame = new Canvas();
-		RectF r = new RectF(box1.getLeft(),box1.getTop(),box1.getRight(),box1.getBottom());
-		Paint paint = new Paint(Color.BLACK);
-		//paint.setStrokeWidth(100.0F);
-		mainLayout.draw(ticTakFrame);
-		box1.draw(ticTakFrame);
 		
 		setupActionBar();
 		
@@ -308,45 +302,48 @@ public class GameActivity extends Activity {
 	 * @param col The col of the ImageView
 	 */
 	private void masterClicked(ImageView box, int row, int col){
+		
 		//Start the game if it hasn't already
 		if(currPlayer==null){
 			nextTurn();
 		}
-		//TODO Figure out why I put gameRunner here and in the end of this method
-		gameRunner();
-		if(playerGrid[row][col]==null){
-			
-			/**Error on Nexus S giving"start called in state 0" and "error (-38, 0)"**/
-			//Can use onPrepared(MediaPlayer player) and threads... (?)
-			if(pressTone.isPlaying()==false){
-				pressTone.start();
-			}
-			
-			ImageView currBox = box;
-			int i =0;
-			//TODO use Bitmap instead. Having problems displaying bitmap
-			if(currPlayer.getResAnimal()==0){
+		//Check if threeInARow before running (Prevents user from clicking 
+		if(stopClicking==false){
+			//gameRunner();
+			if(playerGrid[row][col]==null){
+				
+				/**Error on Nexus S giving"start called in state 0" and "error (-38, 0)"**/
+				//Can use onPrepared(MediaPlayer player) and threads... (?)
+				if(pressTone.isPlaying()==false){
+					pressTone.start();
+				}
+				
+				ImageView currBox = box;
+				int i =0;
+				
 				currBox.setImageBitmap(currPlayer.getBitmap());
+				
+				playerGrid[row][col]= currPlayer;
+				
+				//animate Object slightly
+				yRotateAnimate = ObjectAnimator.ofFloat(currBox,"rotationY",0.0F, -30.0F, 30.0F, 0.0F);
+				yRotateAnimate.setDuration(300);
+				yRotateAnimate.start();
+				
+				gameRunner();
+				
+				nextTurn();
 			}else{
-				currBox.setImageResource(currPlayer.getResAnimal());
+				vibrate.vibrate(20);
+				Toast spaceTakenToast = Toast.makeText(this, "Space taken by " + currPlayer.getName(), Toast.LENGTH_SHORT);
+				spaceTakenToast.show();
 			}
-			
-			playerGrid[row][col]= currPlayer;
-			
-			//animate Object slightly
-			yRotateAnimate = ObjectAnimator.ofFloat(currBox,"rotationY",0.0F, -30.0F, 30.0F, 0.0F);
-			yRotateAnimate.setDuration(300);
-			yRotateAnimate.start();
-			nextTurn();
-		}else{
-			vibrate.vibrate(20);
-			Toast spaceTakenToast = Toast.makeText(this, "Space taken by " + currPlayer.getName(), Toast.LENGTH_SHORT);
-			spaceTakenToast.show();
 		}
-		gameRunner();
 	}
 	
 	private void clearGame(){
+		
+		stopClicking=false;
 		//Iterate through the boxes clearing it
 		for(int x =0; x<3; x++){
 			for(int y=0; y<3; y++){
@@ -364,19 +361,21 @@ public class GameActivity extends Activity {
 		}
 		currBoxForWonAnimate= null;
 		
-		//TODO Temp solution till I use threads
+		//TODO Temp solution till I use threads(?)
 		pressTone.release();
 		pressTone = null;
 		pressTone = MediaPlayer.create(this, R.raw.spottonefiltered);
+		
+		//Allow the player to click now
+		stopClicking=false;
 	}
 	
 	/**
-	 * Finds if a player won or not then adds a point to that player
+	 * Finds if a player won or not then adds a point to that player if it won
 	 * @return Player that won
 	 */
 	private Player threeInARow(){
 		//Check if the current Player won
-		//TODO check both 
 		//Check horizontal
 		for(int row=0; row<3; row++){
 			if(playerGrid[row][0]==currPlayer&&playerGrid[row][1]==currPlayer&&playerGrid[row][2]==currPlayer){
@@ -386,7 +385,6 @@ public class GameActivity extends Activity {
 				return currPlayer;
 			}
 		}
-		
 		//Check vertical
 		for(int col=0; col<3; col++){
 			if(playerGrid[0][col]==currPlayer&&playerGrid[1][col]==currPlayer&&playerGrid[2][col]==currPlayer){
@@ -397,33 +395,23 @@ public class GameActivity extends Activity {
 			}
 		}		
 		
-		//Check horizontal spaces
-		int horizontalCheck = 0;
-		int reverseHorizontalCheck = 0;
-		for(int row=0; row<3; row++){
-			for(int col=0; col<3;col++){
-				if(playerGrid[row][col]==currPlayer){
-					//horizontalCheck++;
-					System.out.println("player at" + row+ " " + col);
-				}
-			}
-		}
-		for(int row=3; row>=0; row--){
-			for(int col=0; col>=0;col--){
-				//if(playerGrid[row][col]==currPlayer){
-					//If all three spots on the playerGrid is taken by the currentPlayer the check should be all true 
-				//	reverseHorizontalCheck++;
-				//}
-			}
+		
+		//Check diagonal
+		if(playerGrid[0][0]==currPlayer&&playerGrid[1][1]==currPlayer&&playerGrid[2][2]==currPlayer){
+			winningBoxes[0] = boxes[0][0];
+			winningBoxes[1] = boxes[1][1];
+			winningBoxes[2] = boxes[2][2];
+			return currPlayer;
 		}
 		
-		if(horizontalCheck==3){
-			System.out.println("Horizontal Match");
-			return currPlayer;
-		}else if(reverseHorizontalCheck==3){
-			System.out.println("Reverse Horizontal Match");
+		//Check opposing diagonal
+		if(playerGrid[0][2]==currPlayer&&playerGrid[1][1]==currPlayer&&playerGrid[2][0]==currPlayer){
+			winningBoxes[0] = boxes[0][2];
+			winningBoxes[1] = boxes[1][1];
+			winningBoxes[2] = boxes[2][0];
 			return currPlayer;
 		}
+		
 		//No one won keep going
 		return null;
 	}
@@ -440,13 +428,11 @@ public class GameActivity extends Activity {
 			currPlayer=player1;
 		}
 		
-		//TODO Can I call updateActionBar()
 		//update the players turn
 		getActionBar().setTitle(currPlayer.getName()+"'s Turn" );
 	}
 	private void gameRunner(){
-		//The number of spaces used when it reaches 9 then the board is full
-		int spacesUsed =0;
+
 		if(threeInARow()!=null){
 			//Added to prevent the winTone and pressTone from simultaneously playing
 			if(pressTone.isPlaying()){
@@ -462,6 +448,8 @@ public class GameActivity extends Activity {
 			updateActionBar();
 			winTone.start();
 		}else{
+			//The number of spaces used when it reaches 9 then the board is full
+			int spacesUsed =0;
 			for(int x=0; x<3; x++){
 				for(int y=0; y<3; y++){
 					if(playerGrid[x][y]!=null){
@@ -469,7 +457,9 @@ public class GameActivity extends Activity {
 					}
 				}
 			}
-			if(spacesUsed==9){
+			//Check if all the spaces are used and if no one has a match
+			if(spacesUsed==9&&threeInARow()==null){
+				Log.d("GameActivity.gameRunner", "Game Tied threeInARow returned null");
 				tieTone.start();
 				//The game is full and no one won so we can clear the game and toast that info
 				Toast gameTied = Toast.makeText(this, "Game Tied", Toast.LENGTH_LONG);
@@ -495,9 +485,9 @@ public class GameActivity extends Activity {
 	 */
 	private void animateWinningBoxes(){
 		if(currBoxForWonAnimate == null){
-			System.out.println("currBoxNull");
+			Log.d("GameActivity.animateWinningBoxes", "CurrBox null");
 			if(winningBoxes[0]==null){
-				System.out.println("WinningBoxes null");
+				Log.d("GameActivity.animateWinningBoxes", "WinningBoxes[0] null");
 			}
 			currBoxForWonAnimate = winningBoxes[0];
 			setupWinningAnimateBoxes();
@@ -512,6 +502,16 @@ public class GameActivity extends Activity {
 			wonAnimation.start();
 		}else if(currBoxForWonAnimate == winningBoxes[2]){
 			clearGame();
+		}
+	}
+	
+	/**
+	 * Save all the data to XML to retrieve later. Will only save if it is a custom game.
+	 */
+	private void saveInfoToXML(){
+		if(isSimpleGame==false){
+			//TODO Save info play with XML parser
+			
 		}
 	}
 }

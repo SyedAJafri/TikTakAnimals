@@ -1,5 +1,12 @@
 Notes to myself you're welcome to view and hopefully answer
 
-in GameActivity using someAnim = ObjectAnimator.ofFloat(nullObject, ...) while settting nullObject to point to an actual
+I have the choice between using XML attributes or using code on a lot of options like a onClick attribute VS a onClickListener
+But with code I can change my values latter like with background color
+
+In GameActivity using someAnim = ObjectAnimator.ofFloat(nullObject, ...) while settting nullObject to point to an actual
 object gave me a null pointer exception. Does someAnim create a copy of nullObject and not keep the reference?
 
+Bitmap must be scaled down when placing in a view due to openGL limits (2048 max).
+
+Also Bitmaps must be scaled down when placing into a bitmap since space is limited.
+Bitmap.createScaledBitmap() helps

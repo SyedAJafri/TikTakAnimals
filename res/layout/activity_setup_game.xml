@@ -18,7 +18,7 @@
         android:layout_weight="1"
         android:clickable="true"
         android:onClick="onView1Clicked"
-        android:text="Chose Some Tasty I Mean Adorable Animals!"
+        android:text="Choose Some Adorable Animals!"
         android:textSize="25dp"
         android:background="#00CC99"
         />
@@ -39,7 +39,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_weight="1"
 	    android:onClick="onView3Clicked"
-	    android:text="Take a Pic of Your Hideous Face!"
+	    android:text="Take a Pic of Your Face!"
 	    android:textSize="25dp"
 	    android:clickable="true"
 	    android:background="#66CCCC"

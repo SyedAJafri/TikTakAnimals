@@ -6,6 +6,8 @@ import android.animation.Animator.AnimatorListener;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -44,7 +46,6 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onAnimationEnd(Animator arg0) {
-			//TODO reset currentButton to original so when the user navigates back it will still be visible
 			launchActivity();
 		}
 
@@ -70,9 +71,14 @@ public class MainActivity extends Activity {
     	button2 = (Button) findViewById(R.id.button2);
     	button3 = (Button) findViewById(R.id.button3);
     	
+    	setupActionBar();
     }
     
 
+	private void setupActionBar() {
+		ColorDrawable actionBarColor = new ColorDrawable(Color.rgb(184,134,11));
+		getActionBar().setBackgroundDrawable(actionBarColor);
+	}
 	protected void onStop() {
 		super.onStop();
 		
@@ -119,7 +125,7 @@ public class MainActivity extends Activity {
     
     private void setupAnim(){
         //Animations
-        startAnim = ObjectAnimator.ofFloat(currentButton, "rotationX", 0.0F, 90.0F);
+        startAnim = ObjectAnimator.ofFloat(currentButton, "rotationX", 0.0F, 90.0F, 0.0F);
         startAnim.setDuration(55);
         startAnim.addListener(animListener);
     }

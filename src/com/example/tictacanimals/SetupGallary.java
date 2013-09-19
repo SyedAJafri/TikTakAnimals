@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -34,10 +37,7 @@ import android.widget.TextView.OnEditorActionListener;
  */
 public class SetupGallary extends Activity {
 
-	//TODO Question: Should I save the picture then access and convert it later in the game, while sending a Flag 
-	//that I need to convert later?
-	
-	
+	//TODO Implement onSavedInstanceState()
 	/**onActivityResult() request codes****/
 	private static final int TAKE_PICTURE1 = 1;
 	private static final int TAKE_PICTURE2 = 2;
@@ -45,7 +45,6 @@ public class SetupGallary extends Activity {
 	private static final int CHOOSE_PICTURE2 = 4;
 	/********************************************/
 	
-	//TODO when user clicks on ready Button display alert message asking the user if he is satisfied with his input
 	Button readyButton;
 	boolean[] isFieldComplete;
 	
@@ -70,6 +69,8 @@ public class SetupGallary extends Activity {
 	
 	Player player1;
 	Player player2;
+	
+	RelativeLayout setupGallaryLayout;
 	
 	//Initialize listeners
 	
@@ -113,6 +114,7 @@ public class SetupGallary extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setup_gallary);
+		setupGallaryLayout = (RelativeLayout)findViewById(R.id.setupGallaryLayout);
 		
 		player1 = new Player();
 		player2 = new Player();
@@ -137,6 +139,8 @@ public class SetupGallary extends Activity {
 		
 		player1ET.addTextChangedListener(playerETListener);
 		player2ET.addTextChangedListener(playerETListener);
+		//TODO Add background color of old view
+		setupActionBar();
 	}
 
 	@Override
@@ -144,6 +148,13 @@ public class SetupGallary extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.setup_gallary, menu);
 		return true;
+	}
+
+	private void setupActionBar() {
+
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		ColorDrawable actionBarColor = new ColorDrawable(Color.rgb(75,0,130));
+		getActionBar().setBackgroundDrawable(actionBarColor);
 	}
 
 	/*
@@ -239,19 +250,30 @@ public class SetupGallary extends Activity {
 		//returns bitmaps(?)
 		if(resultCode == Activity.RESULT_OK){
 			if(requestCode ==CHOOSE_PICTURE1){
-				
-				//TODO Bitmap too large
 				try {
 					player1BM = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(data.toUri(0))));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
+				
+				player1BM = processLargeBitmap(player1BM);
 				displayPicture(1);
 				player1.setBitmap(player1BM);
 				//The user chose a picture. data should hold the (URI?) of the picture
 				System.out.println("the user has chosen a picture data at" + data.getDataString() );
 				
 			}else if(requestCode == CHOOSE_PICTURE2){
+				try {
+					player2BM = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(data.toUri(0))));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+				player2BM = processLargeBitmap(player2BM);
+				displayPicture(2);
+				player1.setBitmap(player2BM);
+				//The user chose a picture. data should hold the (URI?) of the picture
+				System.out.println("the user has chosen a picture data at" + data.getDataString() );
 				
 			}else if(requestCode == TAKE_PICTURE1){
 				player1BM = (Bitmap) data.getExtras().get("data");
@@ -297,6 +319,7 @@ public class SetupGallary extends Activity {
 	 * Launch the next activity moving the users info and pic plus an identifier that the game will not use the defaults
 	 */
 	private void openGame(){
+		//TODO Fix player names before going into game. Such as capitalize the first letter and make sure the string is valid.
 		Intent openGame = new Intent(this, GameActivity.class);
 		openGame.putExtra("IS_SIMPLE_GAME", false);
 		openGame.putExtra("PLAYER1_BM", player1BM);
@@ -306,10 +329,21 @@ public class SetupGallary extends Activity {
 		this.startActivity(openGame);
 	}
 	
-	private Bitmap processLargeBitmap(){
-		
-		
-		return null;
+	/**
+	 * OpenGlRender can only support 2048*2048 max.
+	 * This compresses the image and returns it as a Bitmap if it is too large.
+	 * 
+	 * @param Bitmap playerBM the current player's Bitmap
+	 * 
+	 * @return Bitmap playerBM The original if it is small enough a scaledBitmap if it is too large
+	 */
+	private Bitmap processLargeBitmap(Bitmap playerBM){
+		if(playerBM.getHeight()>200||playerBM.getWidth()>180){
+			return Bitmap.createScaledBitmap(playerBM, 180, 200, false);
+		}else{
+			//playerBM is small enough to add to texture
+			return playerBM;
+		}
 		
 	}
 }

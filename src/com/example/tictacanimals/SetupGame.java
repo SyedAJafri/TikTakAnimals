@@ -8,6 +8,8 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,7 +80,8 @@ public class SetupGame extends Activity {
 	private void setupActionBar() {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+		ColorDrawable actionBarColor = new ColorDrawable(Color.rgb(255,160,122));
+		getActionBar().setBackgroundDrawable(actionBarColor);
 	}
 
 	@Override

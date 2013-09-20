@@ -6,8 +6,10 @@ Warning
 -------
 This game was not created for anyone to actually use. It's actually pretty horrible as a game.
 This is the first app I created and was mostly meant to test myself after reading/watching a large amount of android tutorials/guides.
-I used what I learned over time without using any kind of guide, besides the android developer reference.
-I will be adding more over time as I learn more Android and Java concepts. 
+I started by using what I learned over time without using any kind of guide, besides the android developer reference.
+I will be adding more over time as I learn additional Android and Java concepts.
+
+Update 2: Added more features and fixes like having the game end in animations, and using the camera/gallary instead of animals.
 
 Apologies
 ---------

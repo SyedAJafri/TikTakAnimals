@@ -2,6 +2,8 @@ TicTacAnimals
 =============
 Instead of Xs and Os why not use your face or some cute furry animals. 
 
+Note: I'm not working on this project anymore. It is partially incomplete.
+
 Warning
 -------
 This game was not created for anyone to actually use. It's actually pretty horrible as a game.
@@ -11,10 +13,9 @@ I will be adding more over time as I learn additional Android and Java concepts.
 
 Update 2: Added more features and fixes like having the game end in animations, and using the camera/gallary instead of animals.
 
-Apologies
+Mistakes
 ---------
-I am sorry if I am breaking any good design/coding practices. Some of them might be made out of impatience (hardcoding strings vs referencing them) or 
-not knowing. I'm still new to coding, and I might do some out of impatience just becuase I don't have any future plans for this app.
+I am sorry if I am breaking any good design/coding practices. This is one of my eariler projects.
 
 Sounds
 ------
